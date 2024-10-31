@@ -1,5 +1,6 @@
 import traci
 import sumolib
+import time
 
 # 트래픽 시뮬레이션 초기화
 sumoBinary = sumolib.checkBinary('sumo-gui') 
@@ -16,6 +17,7 @@ def change_traffic_light_to_blue(tl_id):
 try:
     while traci.simulation.getMinExpectedNumber() > 0:
         traci.simulationStep()  # 시뮬레이션을 한 단계 진행합니다.
+        time.sleep(0.1)  # 각 시뮬레이션 스텝마다 0.1초 지연을 추가하여 속도를 늦춤
 
         # 모든 차량을 가져와 구급차가 있는지 확인
         for vehicle_id in traci.vehicle.getIDList():
