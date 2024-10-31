@@ -1,10 +1,15 @@
 import traci
+import os
+
+# 현재 스크립트 파일이 위치한 디렉터리의 절대경로를 얻음
+script_dir = os.path.abspath(os.path.dirname(__file__))
+
 
 def simulation():
     # Directory
-    sumo_binary = "C:\\Users\\1228t\\src\\sumo-1.8.0\\PFiles\\Eclipse\\Sumo\\bin\\sumo-gui"
-    sumocfg_dir = "C:\\Program Files (x86)\\Eclipse\\Sumo\\Project\\asanH.sumocfg"
-    route_dir = "C:\\Program Files (x86)\\Eclipse\\Sumo\\Project\\asanH.rou.xml"
+    sumo_binary = "sumo-gui"
+    sumocfg_dir = script_dir+"/tt.sumocfg"
+    route_dir = script_dir+"/asanH.rou.xml"
 
     # Run SUMO
     sumo_cmd = [sumo_binary, "-c", sumocfg_dir, "-r", route_dir, "--junction-taz", "--no-warnings", "--random"]
