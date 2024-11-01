@@ -8,6 +8,12 @@ def get_ambulance_position(ambulance_id):
     current_edge = traci.vehicle.getRoadID(ambulance_id)
     return position, current_edge
 
+def get_ambulance_speed(ambulance_id):
+    return traci.vehicle.getSpeed(ambulance_id)
+
+def get_simulation_timestamp():
+    return traci.simulation.getTime()
+
 # Function to get upcoming traffic lights along the ambulance's route
 def get_upcoming_traffic_lights(ambulance_id):
     next_tls_list = traci.vehicle.getNextTLS(ambulance_id)

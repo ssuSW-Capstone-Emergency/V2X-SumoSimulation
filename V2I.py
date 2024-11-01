@@ -42,7 +42,7 @@ def run_simulation():
                         # Get the green phase index for the ambulance's lane
                         green_phase_index = get_green_phase_for_ambulance(tls_id, ambulance_lane)
                         if green_phase_index is not None:
-                            send_traffic_light_change_request(tls_id, green_phase_index)
+                            send_traffic_light_change_request(tls_id, ambulance_id, green_phase_index)
                     elif tls_id in passed_tls:
                         reset_traffic_light(tls_id)
                         passed_tls.remove(tls_id)
