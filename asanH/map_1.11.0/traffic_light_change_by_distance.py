@@ -22,7 +22,11 @@ def change_traffic_light_to_blue(tl_id):
 
 try:
     # 구급차를 화면에서 따라가도록 설정
-    traci.gui.trackVehicle("View #0", AMBULANCE_ID)  # "View #0"은 기본 GUI 화면 ID입니다
+    traci.gui.trackVehicle("View #0", AMBULANCE_ID)  # "View #0"은 기본 GUI 화면 ID
+
+    # GUI 확대 배율 설정
+    zoom_level = 3000  # 확대 배율 수준 (예: 3000)
+    traci.gui.setZoom("View #0", zoom_level)
 
     while traci.simulation.getMinExpectedNumber() > 0:
         traci.simulationStep()  # 시뮬레이션을 한 단계 진행
