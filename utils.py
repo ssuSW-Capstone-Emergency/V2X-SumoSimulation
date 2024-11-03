@@ -11,6 +11,9 @@ def get_ambulance_position(ambulance_id):
 def get_ambulance_speed(ambulance_id):
     return traci.vehicle.getSpeed(ambulance_id)
 
+def get_ambulance_lane(ambulance_id):
+    return traci.vehicle.getLaneID(ambulance_id)
+
 def get_simulation_timestamp():
     return traci.simulation.getTime()
 
