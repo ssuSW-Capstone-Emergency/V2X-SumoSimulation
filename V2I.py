@@ -23,7 +23,7 @@ def run_simulation():
     traci.gui.setZoom("View #0", zoom_level)
 
     while traci.simulation.getMinExpectedNumber() > 0:
-        time.sleep(0.2)
+        time.sleep(0.2) # 시뮬레이션 속도 조절
         traci.simulationStep()
 
         try:
@@ -54,11 +54,17 @@ def run_simulation():
                 if distance is not None and distance < 0:
                     passed_tls.add(tls_id)
 
-        except traci.TraCIException:
+        except traci.TraCIException as e:
             # Handle exceptions (e.g., ambulance has arrived at destination)
-            pass
+            if str(e) == "Vehicle 'emergency1' is not known.":
+                print("Ambulance has arrived at destination")
+                break
+            else:
+                print(str(e))
+                pass
 
     traci.close()
+    print("Simulation ended")
 
 if __name__ == "__main__":
     run_simulation()

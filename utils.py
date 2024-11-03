@@ -54,4 +54,4 @@ def set_traffic_light_to_green(tls_id, green_phase_index):
 
 # Function to reset the traffic light to its default program
 def reset_traffic_light(tls_id):
-    traci.trafficlight.setProgram(tls_id, "0")  # Replace "0" with default program ID if different
+    traci.trafficlight.setProgram(tls_id, "0")
