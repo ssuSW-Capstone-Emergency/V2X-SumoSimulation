@@ -12,10 +12,6 @@ def simulation():
     # Run SUMO
     sumo_cmd = [sumo_binary, "-c", sumocfg_dir, "-r", route_dir, "--junction-taz", "--no-warnings", "--random"]
     traci.start(sumo_cmd)
-
-    # Set variables
-    # time = 0
-    # reroute_freq = 10
     
     emergency_vehicle_id = "emergency1"  # ID setting
     notify_distance = 5000 # valid range (meter?)
@@ -56,19 +52,6 @@ def simulation():
                             send_evasion_request(emergency_vehicle_id, veh_id, "both_sides")
                             traci.vehicle.changeLane(veh_id, 2, 25.0)  # 차로 2로 변경하고 25초 동안 유지
 
-
-            # # recalculate the route every specific period
-            # time += 1
-            # if time // reroute_freq == 0:
-            #     for vid in traci.simulation.getDepartedIDList():
-            #         traci.vehicle.rerouteTraveltime(vid)
-            #         print("vid:", vid)
-
-            # # Close SUMO
-            # if time > 10000:
-            #     traci.close()
-            #     print("Simulation ended")
-            #     break
         except traci.TraCIException as e:
             if str(e) == "Vehicle 'emergency1' is not known.":
                 print("Ambulance has arrived at destination")
@@ -76,7 +59,7 @@ def simulation():
             else:
                 print(e)
                 pass
-        
+
         # traci.close()
         # print("Simulation ended")
 
