@@ -1,0 +1,7 @@
+“Instant Veins Virtual Machine 5.2-i1”에는 SUMO 1.11.0이 기본으로 설치되어있습니다.
+
+기존의 asanH.net.xml에서는 SUMO 1.20.0 이후로 추가된 container, cable_car, subway, aircraft, wheelchair, drone 등의 vehicle class를 참조하여
+SUMO 1.11.0에서는 오류가 발생하기 때문에
+SUMO 1.11.0에서 실행 가능하도록 asanH.net.xml을 다시 변환해보았습니다.
+
+앞으로 어느 개발 환경에 어떤 버전을 사용할지 등은 더 고민해 보아야 할 것 같습니다.

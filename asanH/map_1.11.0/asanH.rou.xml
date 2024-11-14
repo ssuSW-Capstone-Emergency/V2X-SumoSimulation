@@ -1,0 +1,17 @@
+<routes>
+    <!-- 차량 타입 정의: 구급차 -->
+    <vType id="ambulance" vClass="delivery" accel="2.6" decel="4.5" sigma="0.5" length="5.0" maxSpeed="25"/>
+    <!-- 구급차 경로 설정 -->
+    <vehicle id="emergency1" type="ambulance" depart="0.00" color="1,0,0">
+        <!-- 엣지 ID들을 사용한 경로 설정 -->
+        <route edges="218855790#1 908608594 844484889 908608597 218899424 1192416061 59097471 975305196#0 975305196#1 59097494 65108194 406642246#0 1028447863 65112827 1028447539 909315384#0"/>
+        <!-- <route edges="65112827 1028447539 909315384#0"/> -->
+    </vehicle>
+
+
+    <!-- 차량 타입 정의 : 일반차량 -->
+    <vType id="regular" vClass="passenger" accel="1.0" decel="1.5" maxSpeed="25.0" />
+    <!-- 일반 차량 설정 -->
+    <flow id="regularFlowA" type="regular" begin="0" end="1500" number="100" from="59097491" to="406642246#2"/>
+    <flow id="regularFlowB" type="regular" begin="0" end="1500" number="100" from="59097491" to="908313110"/>
+</routes>
