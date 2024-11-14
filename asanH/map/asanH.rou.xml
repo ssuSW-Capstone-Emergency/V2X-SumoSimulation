@@ -1,17 +1,27 @@
 <routes>
-    <!-- 차량 타입 정의: 구급차 -->
-    <vType id="ambulance" vClass="delivery" accel="2.6" decel="4.5" sigma="0.5" length="5.0" maxSpeed="25"/>
-    <!-- 구급차 경로 설정 -->
-    <vehicle id="emergency1" type="ambulance" depart="0.00" color="1,0,0">
-        <!-- 엣지 ID들을 사용한 경로 설정 -->
-        <route edges="218855790#1 908608594 844484889 908608597 218899424 1192416061 59097471 975305196#0 975305196#1 59097494 65108194 406642246#0 1028447863 65112827 1028447539 909315384#0"/>
-        <!-- <route edges="65112827 1028447539 909315384#0"/> -->
-    </vehicle>
-
-
     <!-- 차량 타입 정의 : 일반차량 -->
-    <vType id="regular" vClass="passenger" accel="1.0" decel="1.5" maxSpeed="25.0" />
+    <vType id="regular" vClass="passenger" accel="1.0" decel="1.5" maxSpeed="25.0" lcStrategic="1.0" lcSpeedGain="1.0" lcKeepRight="0.0" />
+    
     <!-- 일반 차량 설정 -->
-    <flow id="regularFlowA" type="regular" begin="0" end="1500" number="100" from="59097491" to="406642246#2"/>
-    <flow id="regularFlowB" type="regular" begin="0" end="1500" number="100" from="59097491" to="908313110"/>
+    <flow id="regularFlowA" type="regular" begin="0" end="1000" number="120" from="73591208#0" to="406642246#2" departLane="random"/> <!--올림픽대로-->
+    <flow id="regularFlowB" type="regular" begin="0" end="1000" number="50" from="993264236#0" to="909315384#1" departLane="random"/> <!--송파대로(잠실역) -> 강동대로-->
+    <flow id="regularFlowC" type="regular" begin="0" end="1000" number="120" from="70998416#1" to="1193259448" departLane="random"/> <!--송파대로(잠실역)-->
+    <flow id="regularFlowD" type="regular" begin="0" end="1000" number="40" from="73591208#0" to="87646561" departLane="random"/> <!-- 올림픽대로 -> 한가람로-->
+
+    <!-- 구급차와 반대 차선 차량 -->
+    <flow id="regularFlowE" type="regular" begin="0" end="1000" number="200" from="844484886#0" to="70998378#1" departLane="random"/> <!--송파대로-->
+    <flow id="regularFlowF" type="regular" begin="0" end="1000" number="200" from="406642245#0" to="59097516#1" departLane="random"/> <!--올림픽대로-->
+
+    <!-- -->
+
+    <!-- 차량 타입 정의: 구급차 -->
+    <vType id="ambulance" vClass="emergency" accel="2.6" decel="4.5" sigma="0.5" length="5.0" maxSpeed="25" color="1,0,0"/>
+    
+    <!-- 구급차 경로 설정 -->
+    <vehicle id="emergency1" type="ambulance" depart="100.00" color="1,0,0">
+        <!-- 엣지 ID들을 사용한 경로 설정 -->
+        <route edges="218855790#1 908608594 844484889 908608597 218899424 1192416061 59097471 975305196#0 975305196#1 59097494 65108194 406642246#0 1028447863 65112827 1028447539 909315384#0 -856525750"/>
+        <!-- 도달 후 일시 정지 -->
+        <!-- <stop edge="-856525750" pos="50" duration="10000" /> -->
+    </vehicle>
 </routes>
