@@ -6,7 +6,7 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
 
     <input>
-        <net-file value="asanH.net.xml"/>
+        <net-file value="asanH_add_traffic.net.xml"/>
         <route-files value="asanH.rou.xml"/>
     </input>
 
