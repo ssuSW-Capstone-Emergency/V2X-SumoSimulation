@@ -1,15 +1,18 @@
 **주요 데이터**
-asanH_1_11_0.net.xml // 도로&신호등 구축된 도로 네트워크(service 도로 진입 못하던 문제 해결) + 도로 약간 더 확장
+asanH.net.xml // 도로&신호등 구축된 도로 네트워크(service 도로 진입 못하던 문제 해결) + 도로 약간 더 확장 + version safe 진행
 asanH.rou.xml // 긴급차량(빨간색) 잠실역->아산병원 경로 설정
 asanH.poly.xml // 건물 정보
-asanH.sumocfg // 네트워크 & 차량 & 건물 데이터 결합 시뮬레이션
+asanH.sumocfg // 네트워크 & 차량 & 건물 데이터 결합 시뮬레이션 
+
+=====================
+
+**주요 수정**
+asanH.sumocfg // asanH_1_11_0.net.xml -> asanH.net.xml
 
 =====================
 
 **도로 데이터 파일**
-asanH_withPoly.osm // (poly 정보 추가)+(도로 약간 더 확장) -> asanH.net.xml 생성
-asanH2.osm // 기존 실제 도로 데이터 정보 -> asanH2.net.xml 생성 <<상황봐서 삭제할 예정>> (쉽게, 2는 기존 파일로, 혹시 모를 백업본)
-
+asanH.osm // (poly 정보 추가)+(도로 약간 더 확장) -> asanH.net.xml 생성
 asanH.png // 도로 이미지
 
 =====================
@@ -23,7 +26,6 @@ flow : emergency와 유사 경로 / emergency 경로와 겹치는 또는 반대 
 **추가정보**
 versionSafe.py // SUMO 1.11.0과 버전 맞추기 위한 추가 세팅 
   (현재 내 노트북 : SUMO 1.20.0)
-  ex. asanH.net.xml -> asanH_1_11_0.net.xml
 
 ======================
 
