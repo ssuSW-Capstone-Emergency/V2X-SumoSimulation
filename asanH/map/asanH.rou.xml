@@ -1,3 +1,4 @@
+<!-- 잠실역->아산병원 -->
 <routes>
     <!-- 차량 타입 정의 : 일반차량 -->
     <vType id="regular" vClass="passenger" accel="1.0" decel="1.5" maxSpeed="25.0" lcStrategic="1.0" lcSpeedGain="1.0" lcKeepRight="0.0" />
@@ -18,7 +19,7 @@
     <vType id="ambulance" vClass="emergency" accel="2.6" decel="4.5" sigma="0.5" length="5.0" maxSpeed="25" color="1,0,0"/>
     
     <!-- 구급차 경로 설정 -->
-    <vehicle id="emergency1" type="ambulance" depart="100.00" color="1,0,0">
+    <vehicle id="emergency1" type="ambulance" depart="100.00" color="1,0,0" departLane="random">
         <!-- 엣지 ID들을 사용한 경로 설정 -->
         <route edges="218855790#1 908608594 844484889 908608597 218899424 1192416061 59097471 975305196#0 975305196#1 59097494 65108194 406642246#0 1028447863 65112827 1028447539 909315384#0 -856525750"/>
         <!-- 도달 후 일시 정지 -->

@@ -18,8 +18,8 @@ def remove_disallowed_words(xml_string, words_to_remove):
 words_to_remove = ["container", "cable_car", "subway", "aircraft", "wheelchair", "drone", "scooter"]
 
 # 입력 파일 읽기
-input_file = "asanH.net.xml"
-output_file = "asanHpp.net.xml"
+input_file = "cauH.net.xml"
+output_file = "cauHpp.net.xml"
 
 try:
     # XML 파일 파싱
