@@ -6,10 +6,9 @@
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
 
     <input>
-        <net-file value="asanH.net.xml"/>
-        <route-files value="asanH.rou.xml"/>
-        <additional-files value="asanH.poly.xml"/>
-
+        <net-file value="cauH.net.xml"/>
+        <route-files value="cauH.rou.xml"/>
+        <additional-files value="cauH.poly.xml"/>
     </input>
 
 </configuration>
