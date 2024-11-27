@@ -7,7 +7,7 @@ from packet import *
 # Main function to run the simulation
 def run_simulation():
     # Start the TraCI server with SUMO configuration file
-    sumoCmd = ["sumo-gui", "-c", "asanH/map_1.11.0/tt.sumocfg"]
+    sumoCmd = ["sumo-gui", "-c", "/cauH/map/cauH.sumocfg"]
     traci.start(sumoCmd)
 
     ambulance_id = "emergency1"  # The ID assigned to ambulance vehicle

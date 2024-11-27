@@ -58,3 +58,33 @@ def set_traffic_light_to_green(tls_id, green_phase_index):
 # Function to reset the traffic light to its default program
 def reset_traffic_light(tls_id):
     traci.trafficlight.setProgram(tls_id, "0")
+
+def find_least_congested_lane(emergency_vehicle_id):
+    """
+    Finds the lane with the least number of vehicles for the current road of the emergency vehicle.
+    """
+    current_edge = traci.vehicle.getRoadID(emergency_vehicle_id)
+    lanes = traci.edge.getLaneNumber(current_edge)
+    
+    min_lane_index = None
+    min_vehicle_count = float('inf')
+
+    for lane_index in range(lanes):
+        lane_id = f"{current_edge}_{lane_index}"
+        vehicle_count = traci.lane.getLastStepVehicleNumber(lane_id)
+        if vehicle_count < min_vehicle_count:
+            min_vehicle_count = vehicle_count
+            min_lane_index = lane_index
+
+    return min_lane_index, min_vehicle_count
+
+def change_emergency_vehicle_lane(emergency_vehicle_id):
+    """
+    Changes the lane of the emergency vehicle to the one with the least congestion.
+    """
+    min_lane_index, min_vehicle_count = find_least_congested_lane(emergency_vehicle_id)
+
+    if min_lane_index is not None and traci.vehicle.getLaneIndex(emergency_vehicle_id) != min_lane_index:
+        traci.vehicle.changeLane(emergency_vehicle_id, min_lane_index, 25.0)
+        print(f"Emergency vehicle changing to lane {min_lane_index} with {min_vehicle_count} vehicles.")
+       
