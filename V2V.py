@@ -38,7 +38,7 @@ def scenario_1(emergency_vehicle_id, notify_packet_distance):
             elif lane_count == 2:
                 send_evasion_request(emergency_vehicle_id, veh_id, "right_lane")
                 traci.vehicle.changeLane(veh_id, 1, 25.0)  # Move to lane 1 for 25 seconds
-            elif lane_count == 3:
+            elif lane_count >= 3:
                 send_evasion_request(emergency_vehicle_id, veh_id, "both_sides")
                 traci.vehicle.changeLane(veh_id, 2, 25.0)  # Move to lane 2 for 25 seconds
 
