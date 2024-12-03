@@ -53,6 +53,7 @@ def get_green_phase_for_ambulance(tls_id, ambulance_lane):
 
 # Function to set a traffic light to the specified green phase
 def set_traffic_light_to_green(tls_id, green_phase_index):
+    print("green!")
     traci.trafficlight.setPhase(tls_id, green_phase_index)
 
 # Function to reset the traffic light to its default program
@@ -87,4 +88,3 @@ def change_emergency_vehicle_lane(emergency_vehicle_id):
     if min_lane_index is not None and traci.vehicle.getLaneIndex(emergency_vehicle_id) != min_lane_index:
         traci.vehicle.changeLane(emergency_vehicle_id, min_lane_index, 25.0)
         print(f"Emergency vehicle changing to lane {min_lane_index} with {min_vehicle_count} vehicles.")
-       
