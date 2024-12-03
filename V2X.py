@@ -8,14 +8,8 @@ from V2I import handle_traffic_lights
 notify_distance = 100 
 ambulance_id = "emergency1"  # The ID assigned to ambulance vehicle
 
-# Directory
-sumo_binary = "C:\\Program Files (x86)\\Eclipse\\Sumo\\bin\\sumo-gui.exe"
-sumocfg_dir = "D:\\share\\v2x_without_thread\\asanH\\map_1.11.0\\tt.sumocfg"
-route_dir = "D:\\share\\v2x_without_thread\\asanH\\map_1.11.0\\asanH.rou.xml"
+sumoCmd = ["sumo-gui", "-c", "asanH/map_1.11.0/tt.sumocfg"]  
 
-# Run SUMO
-sumoCmd = [sumo_binary, "-c", sumocfg_dir, "-r", route_dir, "--junction-taz", "--no-warnings", "--random"]
-    
 def scenario_1(emergency_vehicle_id, notify_distance):
     """
     Scenario 1: Surrounding vehicles evade based on their lane count,

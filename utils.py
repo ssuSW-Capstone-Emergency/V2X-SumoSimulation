@@ -53,7 +53,7 @@ def get_green_phase_for_ambulance(tls_id, ambulance_lane):
 
 # Function to set a traffic light to the specified green phase
 def set_traffic_light_to_green(tls_id, green_phase_index):
-    print("green!")
+    # print("green!")
     traci.trafficlight.setPhase(tls_id, green_phase_index)
 
 # Function to reset the traffic light to its default program

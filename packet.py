@@ -17,7 +17,7 @@ def send_evasion_request(emergency_vehicle_id, target_vehicle_id, direction):
     }
 
     print(f"send packet to {target_vehicle_id} : {packet} ")
-    traci.vehicle.setColor(target_vehicle_id, (255,0,0)) # change vehicle color to red when they got the packet 
+    traci.vehicle.setColor(target_vehicle_id, (0,255,0)) # change vehicle color to red when they got the packet 
 
     if direction == "right_edge":
         print(f"{target_vehicle_id} : 편도 1차로 - 우측 가장자리로 피양하세요.")

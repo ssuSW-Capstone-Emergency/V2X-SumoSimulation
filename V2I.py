@@ -22,6 +22,7 @@ def handle_traffic_lights(ambulance_id):
                 # Get the green phase index for the ambulance's lane
                 green_phase_index = get_green_phase_for_ambulance(tls_id, ambulance_lane)
                 if green_phase_index is not None:
+                    # print("send_packet")
                     send_traffic_light_change_request(tls_id, ambulance_id, green_phase_index)
             elif tls_id in passed_tls:
                 reset_traffic_light(tls_id)
