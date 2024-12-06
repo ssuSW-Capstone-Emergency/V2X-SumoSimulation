@@ -1,17 +1,28 @@
-<!-- 잠실역->아산병원 -->
+<!-- 관악현대아파트 -> 중앙대병원 -->
 <routes>
     <!-- 차량 타입 정의 : 일반차량 -->
-    <vType id="regular" vClass="passenger" accel="1.0" decel="1.5" maxSpeed="25.0" lcStrategic="1.5" lcSpeedGain="1.5" lcKeepRight="0.0" />
+    <vType id="regular" vClass="passenger" accel="1.0" decel="1.5" maxSpeed="25.0" lcStrategic="10" lcSpeedGain="10" lcKeepRight="-20" />
     
     <!-- 일반 차량 설정 -->
-    <!-- <flow id="regularFlowA" type="regular" begin="0" end="1000" number="120" from="73591208#0" to="406642246#2" departLane="random"/> -->
+    <flow id="regularFlowA" type="regular" begin="0" end="1200" number="50" from="919243261#1" to="-521279994" departLane="random"/> <!--아파트 인근 긴급차량 반대 차선 차량(1차로/1차로 상황)-->
+    <flow id="regularFlowB" type="regular" begin="0" end="1200" number="150" from="919243261#1" to="-521295452#1" departLane="random"/> <!--아파트 인근 -> 숭실대 정보과학관-->
+    <flow id="regularFlowC" type="regular" begin="0" end="1200" number="50" from="220064933#1" to="172263023#2" departLane="random"/> <!--긴급차량 노선으로 우회전하여 진입하려는 차량1(숭실대 입구역)-->
+    <flow id="regularFlowD" type="regular" begin="0" end="1200" number="100" from="-467478842#0" to="219872334#0" departLane="random"/> <!--긴급차량 노선으로 우회전하여 진입하려는 차량2(숭실대 입구역 가는 길)-->
+    <flow id="regularFlowE" type="regular" begin="0" end="1200" number="50" from="-278046400#4" to="285364023" departLane="random"/> <!--아파트 -> 중앙대-->
+
+    <flow id="regularFlowF" type="regular" begin="0" end="1200" number="500" from="-219872334#0" to="220064934#5" departLane="random"/> <!--긴급차량 반대 차선 차량(5차로/5차로 상황)-->
+    <flow id="regularFlowG" type="regular" begin="0" end="1200" number="50" from="-521182513" to="521182520#4" departLane="random"/> <!--중앙대 병원 -> 숭실대 입구역-->
+    <flow id="regularFlowH" type="regular" begin="0" end="1200" number="50" from="-278146424#0" to="219745445#1" departLane="random"/> <!--병원 인근으로 차량 늘리기-->
+    <flow id="regularFlowI" type="regular" begin="0" end="1200" number="50" from="-278046401#1" to="481148806" departLane="random"/> <!--병원 인근 긴급차량 반대 차선 차량-->
+    <flow id="regularFlowJ" type="regular" begin="0" end="1200" number="600" from="-521182520#4" to="37400345" departLane="random"/> <!--5차로 차량 늘리기-->
+    
 
 
     <!-- 차량 타입 정의: 구급차 -->
-    <vType id="ambulance" vClass="emergency" accel="2.6" decel="4.5" sigma="0.5" length="5.0" maxSpeed="25" color="1,0,0" lcStrategic="1.5" lcSpeedGain="1.5" lcKeepRight="0.0" />
+    <vType id="ambulance" vClass="emergency" accel="2.6" decel="4.5" sigma="0.5" length="5.0" maxSpeed="30" color="1,0,0" lcStrategic="1" lcSpeedGain="1" lcKeepRight="1" />
     
     <!-- 구급차 경로 설정 -->
-    <vehicle id="emergency1" type="ambulance" depart="0.00" color="1,0,0" departLane="random">
+    <vehicle id="emergency1" type="ambulance" depart="100.00" color="1,0,0" departLane="random">
         <!-- 엣지 ID들을 사용한 경로 설정 -->
         <route edges="913157048#2 -278046400#2 -278046400#1 -278046400#0 919243262 520704308 -220064934#7
         -220064934#6 -220064934#5 -220064934#4 -220064934#3 -220064934#2 -220064934#1 -220064934#0 -520704309#2 -520704309#1

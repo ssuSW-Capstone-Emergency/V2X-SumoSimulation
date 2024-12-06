@@ -8,7 +8,10 @@ from V2I import handle_traffic_lights
 notify_distance = 100 
 ambulance_id = "emergency1"  # The ID assigned to ambulance vehicle
 
-sumoCmd = ["sumo-gui", "-c", "asanH/map_1.11.0/tt.sumocfg"]  
+sumoCmd = ["sumo-gui", "-c", "asanH/map/asanH.sumocfg"]  
+# sumoCmd = ["sumo-gui", "-c", "cauH/map/cauH.sumocfg"]
+
+# sumoCmd = ["sumo-gui", "-c", "asanH/map_1.11.0/tt.sumocfg"] 
 
 def scenario_1(emergency_vehicle_id, notify_distance):
     """
@@ -32,8 +35,11 @@ def scenario_1(emergency_vehicle_id, notify_distance):
             if lane_count == 1:
                 send_evasion_request(emergency_vehicle_id, veh_id, "right_edge")
                 # For single-lane roads, vehicles cannot change lanes
-            elif lane_count >= 2:
+            elif lane_count == 2:
                 send_evasion_request(emergency_vehicle_id, veh_id, "right_lane")
+            elif lane_count >= 3:
+                send_evasion_request(emergency_vehicle_id, veh_id, "both_sides")
+                traci.vehicle.changeLane(veh_id, 2, 25.0)
                 if current_lane_index != 0:
                     traci.vehicle.changeLane(veh_id, 0, 25.0)  # Move to rightmost lane
             # Additional logic can be added for lane_count >= 3 if needed
@@ -74,7 +80,7 @@ def simulation(scenario):
 
     traci.gui.trackVehicle("View #0", ambulance_id)  # "View #0" is the default GUI screen ID
 
-    # GUI zoom level
+ #   GUI zoom level
     zoom_level = 3000 
     traci.gui.setZoom("View #0", zoom_level)
 
