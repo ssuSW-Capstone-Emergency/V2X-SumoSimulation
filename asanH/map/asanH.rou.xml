@@ -1,29 +1,20 @@
-<!-- 잠실역->아산병원 -->
-<routes>
-    <!-- 차량 타입 정의 : 일반차량 -->
-    <vType id="regular" vClass="passenger" accel="1.0" decel="1.5" maxSpeed="15.0" lcStrategic="1.0" lcSpeedGain="1.0" lcKeepRight="0.0" />
-    
-    <!-- 일반 차량 설정 -->
-    <flow id="regularFlowA" type="regular" begin="0" end="1000" number="120" from="59097493" to="406642246#2" departLane="random"/> <!--올림픽대로-->
-    <flow id="regularFlowB" type="regular" begin="0" end="1000" number="30" from="867821853#0" to="909315384#1" departLane="random"/> <!--송파대로(잠실역) -> 강동대로-->
-    <flow id="regularFlowC" type="regular" begin="0" end="1000" number="120" from="844484889" to="1193259448" departLane="random"/> <!--송파대로(잠실역) -> 올림픽대로-->
-    <flow id="regularFlowD" type="regular" begin="0" end="1000" number="20" from="59097490" to="87646561" departLane="random"/> <!-- 올림픽대로 -> 한가람로-->
+<?xml version="1.0" encoding="UTF-8"?>
 
-    <!-- 구급차와 반대 차선 차량 -->
-    <flow id="regularFlowE" type="regular" begin="0" end="1000" number="150" from="65108194" to="70998378#1" departLane="random"/> <!--올림픽대로-->
-    <flow id="regularFlowF" type="regular" begin="0" end="1000" number="30" from="909315383" to="-59097446#2" departLane="random"/> <!--올림픽대로-->
-    <flow id="regularFlowG" type="regular" begin="0" end="1000" number="60" from="218899424" to="406642246#1" departLane="random"/> <!--송파대로 -> 올림픽대로 -->
+<!-- generated on 2024-12-06 19:06:48 by Eclipse SUMO netedit Version 1.20.0
+-->
 
-    <!-- -->
-
-    <!-- 차량 타입 정의: 구급차 -->
-    <vType id="ambulance" vClass="emergency" accel="2.6" decel="4.5" sigma="0.5" length="5.0" maxSpeed="20" color="1,0,0"/>
-    
-    <!-- 구급차 경로 설정 -->
-    <vehicle id="emergency1" type="ambulance" depart="0.00" color="1,0,0" departLane="random">
-        <!-- 엣지 ID들을 사용한 경로 설정 -->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <!-- VTypes -->
+    <vType id="ambulance" length="5.00" maxSpeed="25.00" vClass="emergency" color="red" accel="2.6" decel="4.5" sigma="0.5"/>
+    <vType id="regular" maxSpeed="25.00" vClass="passenger" lcStrategic="1.0" lcSpeedGain="1.0" lcKeepRight="0.0" accel="1.0" decel="1.5"/>
+    <!-- Vehicles, persons and containers (sorted by depart) -->
+    <flow id="regularFlowA" type="regular" begin="0.00" departLane="random" from="73591208#0" to="406642246#2" end="1000.00" number="120"/>
+    <flow id="regularFlowB" type="regular" begin="0.00" departLane="random" from="993264236#0" to="909315384#1" end="1000.00" number="50"/>
+    <flow id="regularFlowC" type="regular" begin="0.00" departLane="random" from="70998416#1" to="1193259448" end="1000.00" number="120"/>
+    <flow id="regularFlowD" type="regular" begin="0.00" departLane="random" from="73591208#0" to="87646561" end="1000.00" number="40"/>
+    <flow id="regularFlowE" type="regular" begin="0.00" departLane="random" from="844484886#0" to="70998378#1" end="1000.00" number="200"/>
+    <flow id="regularFlowF" type="regular" begin="0.00" departLane="random" from="406642245#0" to="59097516#1" end="1000.00" number="200"/>
+    <vehicle id="emergency1" type="ambulance" depart="100.00" departLane="random" color="red">
         <route edges="218855790#1 908608594 844484889 908608597 218899424 1192416061 59097471 975305196#0 975305196#1 59097494 65108194 406642246#0 1028447863 65112827 1028447539 909315384#0 -856525750"/>
-        <!-- 도달 후 일시 정지 -->
-        <!-- <stop edge="-856525750" pos="50" duration="10000" /> -->
     </vehicle>
 </routes>
