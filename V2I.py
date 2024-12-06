@@ -6,30 +6,60 @@ notify_v2i_distance = 500
 ambulance_id = "emergency1"
 passed_tls = set()
 
+def get_in_out_lanes_for_tls(ambulance_id, tls_id):
+    """
+    주어진 신호등 tls_id에 대해 구급차가 해당 신호등을 지날 때 이용하는 in-lane과 out-lane을 찾아 반환한다.
+    현재 위치에 관계없이 구급차의 전체 route를 바탕으로, 신호등이 제어하는 link들 중에서
+    route 상 연속되는 edge 쌍에 해당하는 in-lane, out-lane을 찾는다.
+    """
+    route = traci.vehicle.getRoute(ambulance_id)
+    controlled_links = traci.trafficlight.getControlledLinks(tls_id)
+    
+    # route 상 연속된 edge 쌍(in_edge -> out_edge)을 모두 탐색
+    for i in range(len(route)-1):
+        in_edge = route[i]
+        out_edge = route[i+1]
+        # 신호등이 제어하는 링크 (in-lane, out-lane) 중 in_edge -> out_edge로 이어지는 것 확인
+        for link in controlled_links:
+            for lane_tuple in link:
+                # lane_tuple: (in-lane, out-lane, via-lane)
+                # in-lane이 in_edge를 포함하고, out-lane이 out_edge를 포함하면 매칭
+                if in_edge in lane_tuple[0] and out_edge in lane_tuple[1]:
+                    return lane_tuple[0], lane_tuple[1]
+
+    # 해당하는 in-lane/out-lane을 찾지 못한 경우
+    return None, None
+
+
 def handle_traffic_lights(ambulance_id):
-    # 앰뷸런스 in-lane, out-lane 획득
-    ambulance_in_lane = get_ambulance_lane(ambulance_id)
     traffic_lights = get_upcoming_traffic_lights(ambulance_id)
     if not traffic_lights:
         return
-    
-    # 가장 가까운 신호등에 대해 처리 (원한다면 모든 신호등에 대해 반복 가능)
-    tls_id = traffic_lights[0]
-    ambulance_out_lane = get_ambulance_out_lane(ambulance_id, tls_id, ambulance_in_lane)
 
-    # 신호등까지 거리
-    distance = get_distance_to_tls(ambulance_id, tls_id)
-    if distance is not None:
-        if distance < notify_v2i_distance and tls_id not in passed_tls and ambulance_out_lane is not None:
-            green_phase_index = get_green_phase_for_ambulance(tls_id, ambulance_in_lane, ambulance_out_lane)
-            if green_phase_index is not None:
-                send_traffic_light_change_request(tls_id, ambulance_id, green_phase_index)
-        elif tls_id in passed_tls:
-            reset_traffic_light(tls_id)
-            passed_tls.remove(tls_id)
+    # 경로 상의 모든 다가오는 신호등에 대해 처리
+    for tls_id in traffic_lights:
+        distance = get_distance_to_tls(ambulance_id, tls_id)
+        if distance is not None:
+            # 500m 이내에 있을 경우 해당 신호등을 구급차 경로에 맞춰 녹색 신호로 설정
+            if 0 <= distance < notify_v2i_distance and tls_id not in passed_tls:
+                # tls_id에 대한 in-lane, out-lane 식별
+                ambulance_in_lane, ambulance_out_lane = get_in_out_lanes_for_tls(ambulance_id, tls_id)
+                if ambulance_in_lane is None or ambulance_out_lane is None:
+                    # 라우트 매칭 실패 시 건너뜀
+                    continue
+
+                green_phase_index = get_green_phase_for_ambulance(tls_id, ambulance_in_lane, ambulance_out_lane)
+                if green_phase_index is not None:
+                    send_traffic_light_change_request(tls_id, ambulance_id, green_phase_index)
+
+            # 이미 지나간 신호등이면 원래 프로그램으로 리셋
+            elif tls_id in passed_tls:
+                reset_traffic_light(tls_id)
+                passed_tls.remove(tls_id)
 
     # 지나간 신호등 업데이트
-    for t_id in traffic_lights:
-        dist = get_distance_to_tls(ambulance_id, t_id)
+    # distance < 0 이면 신호등을 지나친 상태
+    for tls_id in traffic_lights:
+        dist = get_distance_to_tls(ambulance_id, tls_id)
         if dist is not None and dist < 0:
-            passed_tls.add(t_id)
+            passed_tls.add(tls_id)
