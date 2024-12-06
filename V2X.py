@@ -111,11 +111,11 @@ def simulation(scenario):
         traci.simulationStep()
 
         try:
+            handle_v2i()
             if scenario == 1:
                 scenario_1(ambulance_id, notify_distance)
             elif scenario == 2:
                 scenario_2(ambulance_id, notify_distance)
-            handle_v2i()
         except traci.TraCIException as e:
             # Handle exceptions (e.g., ambulance has arrived at destination)
             if str(e) == f"Vehicle '{ambulance_id}' is not known.":

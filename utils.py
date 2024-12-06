@@ -39,14 +39,15 @@ def get_distance_to_tls(ambulance_id, tls_id):
     return None  # If not found
 
 # Function to determine the green phase index for the ambulance's lane at a traffic light
-def get_green_phase_for_ambulance(tls_id, ambulance_lane):
+def get_green_phase_for_ambulance(tls_id, ambulance_in_lane, ambulance_out_lane):
     logic = traci.trafficlight.getCompleteRedYellowGreenDefinition(tls_id)[0]
     controlled_links = traci.trafficlight.getControlledLinks(tls_id)
 
     for phase_index, phase in enumerate(logic.getPhases()):
         for link_index, link in enumerate(controlled_links):
             for lane_tuple in link:
-                if ambulance_lane == lane_tuple[0]:
+                # in-lane, out-lane 모두 일치하는 흐름에 대해 녹색 신호 체크
+                if lane_tuple[0] == ambulance_in_lane and lane_tuple[1] == ambulance_out_lane:
                     if phase.state[link_index] == 'G':
                         return phase_index
     return None
@@ -88,3 +89,30 @@ def change_emergency_vehicle_lane(emergency_vehicle_id):
     if min_lane_index is not None and traci.vehicle.getLaneIndex(emergency_vehicle_id) != min_lane_index:
         traci.vehicle.changeLane(emergency_vehicle_id, min_lane_index, 25.0)
         print(f"Emergency vehicle changing to lane {min_lane_index} with {min_vehicle_count} vehicles.")
+
+
+def get_ambulance_out_lane(ambulance_id, tls_id, ambulance_in_lane):
+    """
+    앰뷸런스가 현재 in-lane에서 다음 경로로 이동할 때, 해당 신호등이 제어하는
+    (in-lane, out-lane) 흐름 중 앰뷸런스의 다음 edge로 이어지는 out-lane을 반환한다.
+    """
+    route = traci.vehicle.getRoute(ambulance_id)
+    route_index = traci.vehicle.getRouteIndex(ambulance_id)
+    #print("route", route)
+    print("route_index", route_index)
+
+    # 다음 edge가 있는지 확인
+    if route_index < len(route) - 1:
+        next_edge = route[route_index + 1]
+    else:
+        return None
+    
+    controlled_links = traci.trafficlight.getControlledLinks(tls_id)
+    for link in controlled_links:
+        for lane_tuple in link:
+            # lane_tuple: (in-lane, out-lane, via-lane)
+            # out-lane 이름에 next_edge가 포함되어 있으면 해당 out-lane은 다음 edge로 이어지는 차선일 가능성이 큼
+            if lane_tuple[0] == ambulance_in_lane and next_edge in lane_tuple[1]:
+                return lane_tuple[1]
+
+    return None
