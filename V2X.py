@@ -4,14 +4,14 @@ import time
 from utils import *
 from packet import *
 from V2I import handle_traffic_lights
+from random import *
 
 notify_distance = 100 
 ambulance_id = "emergency1"  # The ID assigned to ambulance vehicle
 
-sumoCmd = ["sumo-gui", "-c", "asanH/map/asanH.sumocfg"]  
-# sumoCmd = ["sumo-gui", "-c", "cauH/map/cauH.sumocfg"]
 
-# sumoCmd = ["sumo-gui", "-c", "asanH/map_1.11.0/tt.sumocfg"] 
+# sumoCmd = ["sumo-gui", "-c", "asanH/map/asanH.sumocfg"]  
+sumoCmd = ["sumo-gui", "-c", "cauH/map/cauH.sumocfg"]
 
 def scenario_1(emergency_vehicle_id, notify_distance):
     """
@@ -20,8 +20,17 @@ def scenario_1(emergency_vehicle_id, notify_distance):
     """
     emergency_position = traci.vehicle.getPosition(emergency_vehicle_id)
 
+
     # Handle surrounding vehicles
     for veh_id in traci.vehicle.getIDList():
+        current_lane_index_vehicle = traci.vehicle.getLaneIndex(veh_id)
+        # 긴급 차량이 정지 상태인지 확인하고, 정지 상태라면 1차선으로 이동하도록 변경
+        if traci.vehicle.getSpeed(emergency_vehicle_id) == 0:  # **추가된 부분**
+            current_lane_index = traci.vehicle.getLaneIndex(emergency_vehicle_id)
+            if current_lane_index != 0:  # 현재 1차선이 아닌 경우만 이동
+                traci.vehicle.changeLane(emergency_vehicle_id, 0, 25.0)  # 1차선으로 이동
+                print(f"{emergency_vehicle_id}가 정지 상태에서 1차선으로 이동")
+
         if veh_id == emergency_vehicle_id:
             continue
 
@@ -29,20 +38,33 @@ def scenario_1(emergency_vehicle_id, notify_distance):
         distance = calculate_distance(emergency_position, position)
 
         if distance < notify_distance:  # In a valid distance
-            current_edge = traci.vehicle.getRoadID(veh_id)
-            lane_count = traci.edge.getLaneNumber(current_edge)
-            current_lane_index = traci.vehicle.getLaneIndex(veh_id)
+            current_edge = traci.vehicle.getRoadID(emergency_vehicle_id)
+            lane_count = traci.edge.getLaneNumber(current_edge) # road number
+        
             if lane_count == 1:
-                send_evasion_request(emergency_vehicle_id, veh_id, "right_edge")
-                # For single-lane roads, vehicles cannot change lanes
+                continue
+
             elif lane_count == 2:
-                send_evasion_request(emergency_vehicle_id, veh_id, "right_lane")
+                if(current_lane_index_vehicle == 2):
+                    send_evasion_request(emergency_vehicle_id, veh_id, "right_edge")
+                    traci.vehicle.changeLane(veh_id, 1, 25.0)
+                
+                traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0) # 2차선 주행
+
             elif lane_count >= 3:
-                send_evasion_request(emergency_vehicle_id, veh_id, "both_sides")
-                traci.vehicle.changeLane(veh_id, 2, 25.0)
-                if current_lane_index != 0:
-                    traci.vehicle.changeLane(veh_id, 0, 25.0)  # Move to rightmost lane
-            # Additional logic can be added for lane_count >= 3 if needed
+                if(current_lane_index_vehicle == 2):
+                    ran = randint(1,10)
+                    if (ran >= 5):
+                        send_evasion_request(emergency_vehicle_id, veh_id, "right_edge")
+                        traci.vehicle.changeLane(veh_id, 0, 25.0)   # 1차선 주행      
+                        traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0) # 2차선 주행
+                    else:
+                        send_evasion_request(emergency_vehicle_id, veh_id, "left_edge")
+                        traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0) # 2차선 주행
+                        traci.vehicle.changeLane(veh_id, 2, 25.0)   # 3차선 주행
+                # traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0) # 2차로 주행
+
+            
 
 def handle_v2i():
     handle_traffic_lights(ambulance_id)

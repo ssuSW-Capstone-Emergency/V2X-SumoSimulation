@@ -20,11 +20,9 @@ def send_evasion_request(emergency_vehicle_id, target_vehicle_id, direction):
     traci.vehicle.setColor(target_vehicle_id, (0,255,0)) # change vehicle color to red when they got the packet 
 
     if direction == "right_edge":
-        print(f"{target_vehicle_id} : 편도 1차로 - 우측 가장자리로 피양하세요.")
-    elif direction == "right_lane":
-        print(f"{target_vehicle_id} : 편도 2차로 - 2차선으로 피양하세요.")
-    elif direction == "both_sides":
-        print(f"{target_vehicle_id} : 편도 3차로 - 좌, 우측 차로로 피양 하세요.")
+        print(f"{target_vehicle_id} : 우측으로 피양하세요.")
+    elif direction == "left_edge":
+        print(f"{target_vehicle_id} : 좌측으로 피양 하세요.")
 
 
 # Function to send a traffic light change request

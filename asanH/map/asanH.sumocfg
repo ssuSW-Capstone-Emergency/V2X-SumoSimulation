@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2024-10-15 16:44:36 by Eclipse SUMO sumo Version 1.20.0
+<!-- generated on 2024-12-06 19:06:48 by Eclipse SUMO sumo Version 1.20.0
 -->
 
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
@@ -9,7 +9,6 @@
         <net-file value="asanH.net.xml"/>
         <route-files value="asanH.rou.xml"/>
         <additional-files value="asanH.poly.xml"/>
-
     </input>
 
 </configuration>
