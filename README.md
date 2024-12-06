@@ -15,3 +15,7 @@ TraCIMobility.cc
 TraCIMobility.h
 
 위 경로들 참고해서 해당하는 파일들 github에 있는 내용으로 바꾸기
+
+
+run
+examples/veins/omnetpp.ini
