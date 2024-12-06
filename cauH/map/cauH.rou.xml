@@ -5,17 +5,18 @@
     
     <!-- 일반 차량 설정 -->
     <flow id="regularFlowA" type="regular" begin="0" end="800" number="30" from="919243261#1" to="-521279994" departLane="random"/> <!--아파트 인근 긴급차량 반대 차선 차량(1차로/1차로 상황)-->
-    <flow id="regularFlowB" type="regular" begin="0" end="800" number="100" from="919243261#1" to="-521295452#1" departLane="random"/> <!--아파트 인근 -> 숭실대 정보과학관-->
+    <flow id="regularFlowB" type="regular" begin="0" end="800" number="80" from="919243261#1" to="-521295452#1" departLane="random"/> <!--아파트 인근 -> 숭실대 정보과학관-->
     <flow id="regularFlowC" type="regular" begin="0" end="800" number="50" from="220064933#2" to="172263023#2" departLane="random"/> <!--숭실대 중문 -> 숭실대 정문 방향-->
-    <flow id="regularFlowD" type="regular" begin="0" end="800" number="100" from="-467478842#0" to="219872334#0" departLane="random"/> <!--긴급차량 노선으로 우회전하여 진입하려는 차량2(숭실대 입구역 가는 길)-->
-    <flow id="regularFlowE" type="regular" begin="0" end="800" number="50" from="-278046400#4" to="285364023" departLane="random"/> <!--아파트 -> 중앙대-->
+    <flow id="regularFlowD" type="regular" begin="0" end="800" number="20" from="-467478842#0" to="219872334#0" departLane="random"/> <!--긴급차량 노선으로 우회전하여 진입하려는 차량2(숭실대 입구역 가는 길)-->
+    <flow id="regularFlowE" type="regular" begin="0" end="800" number="10" from="-278046400#4" to="285364023" departLane="random"/> <!--아파트 -> 중앙대-->
 
-    <flow id="regularFlowF" type="regular" begin="0" end="800" number="200" from="-219872334#0" to="220064934#5" departLane="random"/> <!--긴급차량 반대 차선 차량(5차로/5차로 상황)-->
-    <flow id="regularFlowG" type="regular" begin="0" end="800" number="50" from="-219745445#0" to="521182520#4" departLane="random"/> <!--중앙대 병원 -> 숭실대 입구역-->
-    <flow id="regularFlowH" type="regular" begin="0" end="800" number="50" from="-278146424#0" to="219745445#1" departLane="random"/> <!--병원 인근으로 차량 늘리기-->
+    <flow id="regularFlowF" type="regular" begin="0" end="800" number="80" from="-219872334#0" to="220064934#5" departLane="random"/> <!--긴급차량 반대 차선 차량(5차로/5차로 상황)-->
+    <flow id="regularFlowG" type="regular" begin="0" end="800" number="40" from="-219745445#0" to="521182520#4" departLane="random"/> <!--중앙대 병원 -> 숭실대 입구역-->
+    <flow id="regularFlowH" type="regular" begin="0" end="800" number="40" from="-278146424#0" to="219745445#1" departLane="random"/> <!--병원 인근으로 차량 늘리기-->
     <flow id="regularFlowI" type="regular" begin="0" end="800" number="50" from="-278046401#1" to="481148806" departLane="random"/> <!--병원 인근 긴급차량 반대 차선 차량-->
-    <flow id="regularFlowJ" type="regular" begin="0" end="800" number="200" from="-521182520#4" to="37400345" departLane="random"/> <!--5차로 차량 늘리기-->
-    
+    <flow id="regularFlowJ" type="regular" begin="0" end="800" number="80" from="-521182520#4" to="37400345" departLane="random"/> <!--5차로 차량 늘리기-->
+    <flow id="regularFlowK" type="regular" begin="0" end="800" number="50" from="-220064934#6" to="219872334#1" departLane="random"/> <!--5차로 차량 늘리기-->
+
 
 
     <!-- 차량 타입 정의: 구급차 -->
