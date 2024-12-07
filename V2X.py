@@ -6,7 +6,7 @@ from packet import *
 from V2I import handle_traffic_lights
 from random import *
 
-notify_distance = 100 
+notify_distance = 100
 ambulance_id = "emergency1"  # The ID assigned to ambulance vehicle
 
 
@@ -74,6 +74,15 @@ def scenario_2(emergency_vehicle_id, notify_distance, min_change_interval=5.0):
     Scenario 2: The emergency vehicle optimizes its route by moving to
     the lane with the least congestion, while surrounding vehicles do not evade.
     """
+    # Handle surrounding vehicles
+    for veh_id in traci.vehicle.getIDList():
+        # 긴급 차량이 정지 상태인지 확인하고, 정지 상태라면 1차선으로 이동하도록 변경
+        if traci.vehicle.getSpeed(emergency_vehicle_id) == 0:  # **추가된 부분**
+            current_lane_index = traci.vehicle.getLaneIndex(emergency_vehicle_id)
+            if current_lane_index != 0:  # 현재 1차선이 아닌 경우만 이동
+                traci.vehicle.changeLane(emergency_vehicle_id, 0, 25.0)  # 1차선으로 이동
+                print(f"{emergency_vehicle_id}가 정지 상태에서 1차선으로 이동")
+
     # Record the last time the lane was changed
     if not hasattr(scenario_2, "last_changed_lane_time"):
         scenario_2.last_changed_lane_time = 0
