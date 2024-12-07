@@ -75,30 +75,30 @@ def scenario_1(emergency_vehicle_id, notify_distance):
                         print(f"{veh_id}가 구급차를 앞질렀으므로 정상 속도로 주행 재개")
 
                 # 같은 도로가 아니거나 다른 조건은 적용 안 함
-            else:
-                # 도로가 좁아지지 않는 상황에 대한 기존 로직 유지
-                current_lane_index_vehicle = traci.vehicle.getLaneIndex(veh_id)
-                lane_count = traci.edge.getLaneNumber(current_edge)
+        #else:
+            # 도로가 좁아지는지 여부에 상관 없이 기존 로직은 실행
+            current_lane_index_vehicle = traci.vehicle.getLaneIndex(veh_id)
+            lane_count = traci.edge.getLaneNumber(current_edge)
 
-                if lane_count == 1:
-                    continue
-                elif lane_count == 2:
-                    if current_lane_index_vehicle == 2:
+            if lane_count == 1:
+                continue
+            elif lane_count == 2:
+                if current_lane_index_vehicle == 2:
+                    send_evasion_request(emergency_vehicle_id, veh_id, "right_edge")
+                    traci.vehicle.changeLane(veh_id, 1, 25.0)
+                
+                traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0)
+            elif lane_count >= 3:
+                if current_lane_index_vehicle == 2:
+                    ran = randint(1,10)
+                    if ran >= 5:
                         send_evasion_request(emergency_vehicle_id, veh_id, "right_edge")
-                        traci.vehicle.changeLane(veh_id, 1, 25.0)
-                    
-                    traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0)
-                elif lane_count >= 3:
-                    if current_lane_index_vehicle == 2:
-                        ran = randint(1,10)
-                        if ran >= 5:
-                            send_evasion_request(emergency_vehicle_id, veh_id, "right_edge")
-                            traci.vehicle.changeLane(veh_id, 0, 25.0)
-                            traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0)
-                        else:
-                            send_evasion_request(emergency_vehicle_id, veh_id, "left_edge")
-                            traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0)
-                            traci.vehicle.changeLane(veh_id, 2, 25.0)
+                        traci.vehicle.changeLane(veh_id, 0, 25.0)
+                        traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0)
+                    else:
+                        send_evasion_request(emergency_vehicle_id, veh_id, "left_edge")
+                        traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0)
+                        traci.vehicle.changeLane(veh_id, 2, 25.0)
 
             
 
