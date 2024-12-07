@@ -11,58 +11,86 @@ ambulance_id = "emergency1"  # The ID assigned to ambulance vehicle
 
 
 # sumoCmd = ["sumo-gui", "-c", "asanH/map/asanH.sumocfg"]  
-sumoCmd = ["sumo-gui", "-c", "cauH/map/cauH.sumocfg"]
+sumoCmd = ["sumo-gui", "-c", "asanH/map/asanH.sumocfg"]
 
 def scenario_1(emergency_vehicle_id, notify_distance):
     """
-    Scenario 1: Surrounding vehicles evade based on their lane count,
-    and the emergency vehicle continues its route without lane optimization.
+    Scenario 1:
+    - 기존: 주변 차량이 구급차 접근 시 차선 변경을 통해 회피 동작 수행
+    - 수정: 도로가 좁아지는 구간(다음 edge의 차선 수 < 현재 edge의 차선 수)에서
+            같은 도로 상 뒤에 있는 일반 차량들은 구급차를 추월하지 않고 뒤에서 대기
     """
     emergency_position = traci.vehicle.getPosition(emergency_vehicle_id)
+    current_edge = traci.vehicle.getRoadID(emergency_vehicle_id)
+    lane_count = traci.edge.getLaneNumber(current_edge)
+    
+    # 구급차 경로 파악
+    route = traci.vehicle.getRoute(emergency_vehicle_id)
+    route_index = traci.vehicle.getRouteIndex(emergency_vehicle_id)
 
+    next_edge = None
+    if route_index < len(route)-1:
+        next_edge = route[route_index+1]
 
-    # Handle surrounding vehicles
+    next_lane_count = traci.edge.getLaneNumber(next_edge) if next_edge else lane_count
+
+    # 긴급 차량 정지 상태 시 1차선으로 이동 로직
+    if traci.vehicle.getSpeed(emergency_vehicle_id) == 0:
+        current_lane_index = traci.vehicle.getLaneIndex(emergency_vehicle_id)
+        if current_lane_index != 0:
+            traci.vehicle.changeLane(emergency_vehicle_id, 0, 25.0)
+            print(f"{emergency_vehicle_id}가 정지 상태에서 1차선으로 이동")
+
+    # 차선이 좁아지는 구간인지 판단
+    lane_narrowing = (next_lane_count < lane_count)
+
+    # 구급차 현재 도로 상 위치(해당 차선 시작점으로부터의 거리)
+    amb_lane_pos = traci.vehicle.getLanePosition(emergency_vehicle_id)
+
+    # 주변 차량 처리
     for veh_id in traci.vehicle.getIDList():
-        current_lane_index_vehicle = traci.vehicle.getLaneIndex(veh_id)
-        # 긴급 차량이 정지 상태인지 확인하고, 정지 상태라면 1차선으로 이동하도록 변경
-        if traci.vehicle.getSpeed(emergency_vehicle_id) == 0:  # **추가된 부분**
-            current_lane_index = traci.vehicle.getLaneIndex(emergency_vehicle_id)
-            if current_lane_index != 0:  # 현재 1차선이 아닌 경우만 이동
-                traci.vehicle.changeLane(emergency_vehicle_id, 0, 25.0)  # 1차선으로 이동
-                print(f"{emergency_vehicle_id}가 정지 상태에서 1차선으로 이동")
-
         if veh_id == emergency_vehicle_id:
             continue
 
         position = traci.vehicle.getPosition(veh_id)
         distance = calculate_distance(emergency_position, position)
 
-        if distance < notify_distance:  # In a valid distance
-            current_edge = traci.vehicle.getRoadID(emergency_vehicle_id)
-            lane_count = traci.edge.getLaneNumber(current_edge) # road number
-        
-            if lane_count == 1:
-                continue
-
-            elif lane_count == 2:
-                if(current_lane_index_vehicle == 2):
-                    send_evasion_request(emergency_vehicle_id, veh_id, "right_edge")
-                    traci.vehicle.changeLane(veh_id, 1, 25.0)
+        if distance < notify_distance:
+            # 도로 좁아지는 구간에서 같은 도로 상 구급차 뒤에 있는 차량 제어
+            if lane_narrowing:
+                # 같은 도로에 있고, lane position 상 구급차 뒤(작은 값)인 경우
+                if traci.vehicle.getRoadID(veh_id) == current_edge:
+                    veh_lane_pos = traci.vehicle.getLanePosition(veh_id)
+                    if veh_lane_pos < amb_lane_pos:
+                        # 뒤에 있는 차량을 강제 감속시켜 추월 불가하게 함
+                        traci.vehicle.slowDown(veh_id, 0.0, 10.0)
+                        traci.vehicle.setColor(veh_id, (0,0,255)) 
+                        print(f"{veh_id}가 병목구간에서 구급차 뒤에서 대기하도록 속도 감소")
+            else:
+                # 기존 회피 로직(차선 수에 따른 회피)
+                current_lane_index_vehicle = traci.vehicle.getLaneIndex(veh_id)
+                lane_count = traci.edge.getLaneNumber(current_edge)
                 
-                traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0) # 2차선 주행
-
-            elif lane_count >= 3:
-                if(current_lane_index_vehicle == 2):
-                    ran = randint(1,10)
-                    if (ran >= 5):
+                if lane_count == 1:
+                    continue
+                elif lane_count == 2:
+                    if current_lane_index_vehicle == 2:
                         send_evasion_request(emergency_vehicle_id, veh_id, "right_edge")
-                        traci.vehicle.changeLane(veh_id, 0, 25.0)   # 1차선 주행      
-                        traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0) # 2차선 주행
-                    else:
-                        send_evasion_request(emergency_vehicle_id, veh_id, "left_edge")
-                        traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0) # 2차선 주행
-                        traci.vehicle.changeLane(veh_id, 2, 25.0)   # 3차선 주행
-                # traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0) # 2차로 주행
+                        traci.vehicle.changeLane(veh_id, 1, 25.0)
+                    
+                    traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0)
+                elif lane_count >= 3:
+                    if current_lane_index_vehicle == 2:
+                        ran = randint(1,10)
+                        if ran >= 5:
+                            send_evasion_request(emergency_vehicle_id, veh_id, "right_edge")
+                            traci.vehicle.changeLane(veh_id, 0, 25.0)
+                            traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0)
+                        else:
+                            send_evasion_request(emergency_vehicle_id, veh_id, "left_edge")
+                            traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0)
+                            traci.vehicle.changeLane(veh_id, 2, 25.0)
+
 
             
 
