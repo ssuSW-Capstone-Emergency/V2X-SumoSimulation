@@ -65,7 +65,7 @@ def scenario_1(emergency_vehicle_id, notify_distance):
                     # 구급차 뒤에 있는 경우 (추월 불가 - 속도 감소)
                     if veh_lane_pos < amb_lane_pos:
                         traci.vehicle.slowDown(veh_id, 0.0, 10.0)
-                        traci.vehicle.setColor(veh_id, (255,0,0)) 
+                        traci.vehicle.setColor(veh_id, (0,0,255)) 
                         print(f"{veh_id}가 병목구간에서 구급차 뒤에 대기하도록 속도 감소")
                     else:
                         # 이미 구급차를 지나 앞에 있다면, 정상 속도로 복귀
