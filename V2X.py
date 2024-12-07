@@ -13,17 +13,19 @@ ambulance_id = "emergency1"  # The ID assigned to ambulance vehicle
 # sumoCmd = ["sumo-gui", "-c", "asanH/map/asanH.sumocfg"]  
 sumoCmd = ["sumo-gui", "-c", "asanH/map/asanH.sumocfg"]
 
+
+
 def scenario_1(emergency_vehicle_id, notify_distance):
     """
     Scenario 1:
-    - 기존: 주변 차량이 구급차 접근 시 차선 변경을 통해 회피 동작 수행
-    - 수정: 도로가 좁아지는 구간(다음 edge의 차선 수 < 현재 edge의 차선 수)에서
-            같은 도로 상 뒤에 있는 일반 차량들은 구급차를 추월하지 않고 뒤에서 대기
+    도로가 좁아지는 상황에서:
+    - 구급차 뒤에 있는 차량은 속도 감소(정지)
+    - 이미 구급차 앞으로 간 차량은 다시 가속(정상 속도로 복귀)
     """
     emergency_position = traci.vehicle.getPosition(emergency_vehicle_id)
     current_edge = traci.vehicle.getRoadID(emergency_vehicle_id)
     lane_count = traci.edge.getLaneNumber(current_edge)
-    
+
     # 구급차 경로 파악
     route = traci.vehicle.getRoute(emergency_vehicle_id)
     route_index = traci.vehicle.getRouteIndex(emergency_vehicle_id)
@@ -44,10 +46,9 @@ def scenario_1(emergency_vehicle_id, notify_distance):
     # 차선이 좁아지는 구간인지 판단
     lane_narrowing = (next_lane_count < lane_count)
 
-    # 구급차 현재 도로 상 위치(해당 차선 시작점으로부터의 거리)
+    # 구급차 현재 도로 상 위치
     amb_lane_pos = traci.vehicle.getLanePosition(emergency_vehicle_id)
 
-    # 주변 차량 처리
     for veh_id in traci.vehicle.getIDList():
         if veh_id == emergency_vehicle_id:
             continue
@@ -56,21 +57,29 @@ def scenario_1(emergency_vehicle_id, notify_distance):
         distance = calculate_distance(emergency_position, position)
 
         if distance < notify_distance:
-            # 도로 좁아지는 구간에서 같은 도로 상 구급차 뒤에 있는 차량 제어
             if lane_narrowing:
-                # 같은 도로에 있고, lane position 상 구급차 뒤(작은 값)인 경우
+                # 같은 도로에 있는지 확인
                 if traci.vehicle.getRoadID(veh_id) == current_edge:
                     veh_lane_pos = traci.vehicle.getLanePosition(veh_id)
+                    
+                    # 구급차 뒤에 있는 경우 (추월 불가 - 속도 감소)
                     if veh_lane_pos < amb_lane_pos:
-                        # 뒤에 있는 차량을 강제 감속시켜 추월 불가하게 함
                         traci.vehicle.slowDown(veh_id, 0.0, 10.0)
-                        traci.vehicle.setColor(veh_id, (0,0,255)) 
-                        print(f"{veh_id}가 병목구간에서 구급차 뒤에서 대기하도록 속도 감소")
+                        traci.vehicle.setColor(veh_id, (255,0,0)) 
+                        print(f"{veh_id}가 병목구간에서 구급차 뒤에 대기하도록 속도 감소")
+                    else:
+                        # 이미 구급차를 지나 앞에 있다면, 정상 속도로 복귀
+                        # setSpeed(veh_id, -1)은 속도 제한 해제를 의미하며, 원래 속도대로 주행
+                        traci.vehicle.setSpeed(veh_id, -1)
+                        traci.vehicle.setColor(veh_id, (255,255,255))
+                        print(f"{veh_id}가 구급차를 앞질렀으므로 정상 속도로 주행 재개")
+
+                # 같은 도로가 아니거나 다른 조건은 적용 안 함
             else:
-                # 기존 회피 로직(차선 수에 따른 회피)
+                # 도로가 좁아지지 않는 상황에 대한 기존 로직 유지
                 current_lane_index_vehicle = traci.vehicle.getLaneIndex(veh_id)
                 lane_count = traci.edge.getLaneNumber(current_edge)
-                
+
                 if lane_count == 1:
                     continue
                 elif lane_count == 2:
@@ -90,7 +99,6 @@ def scenario_1(emergency_vehicle_id, notify_distance):
                             send_evasion_request(emergency_vehicle_id, veh_id, "left_edge")
                             traci.vehicle.changeLane(emergency_vehicle_id, 1, 25.0)
                             traci.vehicle.changeLane(veh_id, 2, 25.0)
-
 
             
 
