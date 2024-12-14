@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2024-12-06 23:10:44 by Eclipse SUMO netedit Version 1.20.0
+-->
+
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
+    <!-- VTypes -->
+    <vType id="ambulance" length="5.00" maxSpeed="20.00" vClass="emergency" color="red" lcStrategic="1" lcSpeedGain="1" lcKeepRight="-1" accel="2.6" decel="4.5" sigma="0.5"/>
+    <vType id="regular" maxSpeed="15.00" vClass="passenger" lcStrategic="10" lcSpeedGain="10" lcKeepRight="-20" accel="1.0" decel="1.5"/>
+    <!-- Vehicles, persons and containers (sorted by depart) -->
+    <vehicle id="emergency1" type="ambulance" depart="0.00" departLane="random" color="red">
+        <route edges="913157048#2 -278046400#2 -278046400#1 -278046400#0 919243262 520704308 -220064934#7 -220064934#6 -220064934#5 -220064934#4 -220064934#3 -220064934#2 -220064934#1 -220064934#0 -520704309#2 -520704309#1 -520704309#0 -521182520#4 -521182520#3 -521182520#2 -521182520#1 -521182520#0 -521182521#1 -521182521#0 278146427#0 278146427#1 -521182515 172263024#0 45027298#0 45027298#1 45027298#2 470199635#0 470199635#1 470199635#2 470199635#3 470199635#4 470199635#5 470199635#6"/>
+    </vehicle>
+    <flow id="regularFlowA" type="regular" begin="0.00" departLane="random" from="919243261#1" to="-521279994" end="800.00" number="30"/>
+    <flow id="regularFlowB" type="regular" begin="0.00" departLane="random" from="919243261#1" to="-521295452#1" end="800.00" number="80"/>
+    <flow id="regularFlowC" type="regular" begin="0.00" departLane="random" from="220064933#2" to="172263023#2" end="800.00" number="50"/>
+    <flow id="regularFlowD" type="regular" begin="0.00" departLane="random" from="-467478842#0" to="219872334#0" end="800.00" number="20"/>
+    <flow id="regularFlowE" type="regular" begin="0.00" departLane="random" from="-278046400#4" to="285364023" end="800.00" number="10"/>
+    <flow id="regularFlowF" type="regular" begin="0.00" departLane="random" from="-219872334#0" to="220064934#5" end="800.00" number="80"/>
+    <flow id="regularFlowG" type="regular" begin="0.00" departLane="random" from="-219745445#0" to="521182520#4" end="800.00" number="40"/>
+    <flow id="regularFlowH" type="regular" begin="0.00" departLane="random" from="-278146424#0" to="219745445#1" end="800.00" number="40"/>
+    <flow id="regularFlowI" type="regular" begin="0.00" departLane="random" from="-278046401#1" to="481148806" end="800.00" number="50"/>
+    <flow id="regularFlowJ" type="regular" begin="0.00" departLane="random" from="-521182520#4" to="37400345" end="800.00" number="80"/>
+    <flow id="regularFlowK" type="regular" begin="0.00" departLane="random" from="-220064934#6" to="219872334#1" end="800.00" number="50"/>
+</routes>

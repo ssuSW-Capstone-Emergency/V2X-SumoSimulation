@@ -15,11 +15,11 @@ def remove_disallowed_words(xml_string, words_to_remove):
     return modified_xml
 
 # 제거하고 싶은 단어들의 리스트(SUMO 1.11.0에서 지원하지 않는 참조)
-words_to_remove = ["container", "cable_car", "subway", "aircraft", "wheelchair", "drone"]
+words_to_remove = ["container", "cable_car", "subway", "aircraft", "wheelchair", "drone", "scooter"]
 
 # 입력 파일 읽기
 input_file = "asanH.net.xml"
-output_file = "asanH_1_11_0.net.xml"
+output_file = "asanHpp.net.xml"
 
 try:
     # XML 파일 파싱
