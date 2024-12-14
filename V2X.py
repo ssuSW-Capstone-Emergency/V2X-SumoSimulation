@@ -6,6 +6,7 @@ from packet import *
 from V2I import handle_traffic_lights
 from random import *
 
+
 notify_distance = 100
 ambulance_id = "emergency1"  # The ID assigned to ambulance vehicle
 
@@ -106,6 +107,8 @@ def scenario_2(emergency_vehicle_id, notify_distance, min_change_interval=5.0):
 
 # Main function to run the simulation
 def simulation(scenario):
+    simulation_started = False
+
     # Start the TraCI server with SUMO configuration file
     traci.start(sumoCmd)
 
@@ -119,6 +122,13 @@ def simulation(scenario):
         time.sleep(0.2)  # Simulation speed control
         traci.simulationStep()
 
+        if simulation_started and ambulance_id not in traci.vehicle.getIDList():
+            simulation_started = False
+            print("Ambulance has arrived at destination")
+            break
+
+        simulation_started = ambulance_id in traci.vehicle.getIDList()
+
         try:
             handle_v2i()
             if scenario == 1:
@@ -126,13 +136,8 @@ def simulation(scenario):
             elif scenario == 2:
                 scenario_2(ambulance_id, notify_distance)
         except traci.TraCIException as e:
-            # Handle exceptions (e.g., ambulance has arrived at destination)
-            if str(e) == f"Vehicle '{ambulance_id}' is not known.":
-                print("Ambulance has arrived at destination")
-                break
-            else:
-                print(str(e))
-                pass
+            print(str(e))
+            pass
 
     traci.close()
     print("Simulation ended")

@@ -2,9 +2,9 @@ import traci
 from utils import *
 from packet import *
 
-notify_v2i_distance = 500  
+notify_v2i_distance = 80  
 ambulance_id = "emergency1"
-passed_tls = set()
+manipulated_tls = dict() # passed but not reset [tls_id]=time
 
 def get_in_out_lanes_for_tls(ambulance_id, tls_id):
     """
@@ -40,8 +40,9 @@ def handle_traffic_lights(ambulance_id):
     for tls_id in traffic_lights:
         distance = get_distance_to_tls(ambulance_id, tls_id)
         if distance is not None:
-            # 500m 이내에 있을 경우 해당 신호등을 구급차 경로에 맞춰 녹색 신호로 설정
-            if 0 <= distance < notify_v2i_distance and tls_id not in passed_tls:
+            # notify_v2i_distance 이내에 있을 경우 해당 신호등을 구급차 경로에 맞춰 녹색 신호로 설정
+            # 한 번 신호를 바꾼 경우 manipulated_tls에 추가하고, 5초 이후에 다시 변경 가능
+            if 0 <= distance < notify_v2i_distance and ( tls_id not in manipulated_tls.keys() or ( (get_current_time()-manipulated_tls[tls_id])>5 ) ):
                 # tls_id에 대한 in-lane, out-lane 식별
                 ambulance_in_lane, ambulance_out_lane = get_in_out_lanes_for_tls(ambulance_id, tls_id)
                 if ambulance_in_lane is None or ambulance_out_lane is None:
@@ -51,15 +52,15 @@ def handle_traffic_lights(ambulance_id):
                 green_phase_index = get_green_phase_for_ambulance(tls_id, ambulance_in_lane, ambulance_out_lane)
                 if green_phase_index is not None:
                     send_traffic_light_change_request(tls_id, ambulance_id, green_phase_index)
+                    manipulated_tls[tls_id]=get_current_time() # 신호 변경 시간 기록
 
-            # 이미 지나간 신호등이면 원래 프로그램으로 리셋
-            elif tls_id in passed_tls:
-                reset_traffic_light(tls_id)
-                passed_tls.remove(tls_id)
 
     # 지나간 신호등 업데이트
-    # distance < 0 이면 신호등을 지나친 상태
+    # manipulated_tls에 존재한다: 이미 해당 tls에 제어 신호를 전송했다.
+    # traffic_lights: 다가오는 신호등 목록
+    # 신호를 전송했고, 이미 지나간 것이 확실한 신호등은 기본 tls 프로그램으로 리셋 
     for tls_id in traffic_lights:
         dist = get_distance_to_tls(ambulance_id, tls_id)
-        if dist is not None and dist < 0:
-            passed_tls.add(tls_id)
+        if ( tls_id in manipulated_tls.keys() ) and ( tls_id not in traffic_lights ):
+            reset_traffic_light(tls_id)
+            manipulated_tls.remove(tls_id)
