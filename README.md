@@ -44,10 +44,9 @@ V2X (Vehicle-to-Everything) is a concept that encompasses V2V (Vehicle-to-Vehicl
      ```
 
 ## 시연
-- general
-
   
+- apply V2X
   
-- V2X
+  We can see nearby vehicles giving shelter to the emergency vehicle(red) to pass. Additionally, traffic lights within a certain distance from an emergency vehicle will remain green.
   
   ![제목+없는+동영상+-+Clipchamp로+제작 (1)](https://github.com/user-attachments/assets/6519ceea-2a40-45a1-aae1-cba066c72175)
