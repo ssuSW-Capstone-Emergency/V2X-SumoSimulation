@@ -1,12 +1,9 @@
 **주요 데이터**
 
-asanH.net.xml // 도로&신호등 구축된 도로 네트워크
-
-asanH.rou.xml // 긴급차량(빨간색) 잠실역->아산병원 경로 설정
-
-asanH.poly.xml // 건물 정보
-
-asanH.sumocfg // 네트워크 & 차량 & 건물 데이터 결합 시뮬레이션
+- asanH.net.xml // 도로&신호등 구축된 도로 네트워크
+- asanH.rou.xml // 긴급차량(빨간색) 잠실역->아산병원 경로 설정
+- asanH.poly.xml // 건물 정보
+- asanH.sumocfg // 네트워크 & 차량 & 건물 데이터 결합 시뮬레이션
 
 =====================
 
