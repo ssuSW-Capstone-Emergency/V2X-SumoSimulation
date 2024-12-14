@@ -17,13 +17,17 @@ V2X (Vehicle-to-Everything) is a concept that encompasses V2V (Vehicle-to-Vehicl
   - `pip install -r requirements.txt`
 
 ## Usage
-
+- V2X
 When you run V2X.py, two ways are possible. All are technologies using V2X, and there are differences in specific algorithms and standards for adoption.
 ```
 python V2X.py
 # Enter scenario (1 or 2): 
 ```
 
+- general(no V2X, V2I)
+```
+python general.py
+```
 
 ## V2X 적용 시연
 
