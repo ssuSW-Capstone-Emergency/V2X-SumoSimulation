@@ -3,7 +3,7 @@ import traci
 
 # get current time in second
 def get_current_time():
-    return traci.simulation.getTime()/1000
+    return traci.simulation.getTime()
 
 # between two positions
 def calculate_distance(pos1, pos2):

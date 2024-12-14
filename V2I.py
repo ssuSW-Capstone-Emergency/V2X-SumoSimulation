@@ -68,5 +68,6 @@ def handle_traffic_lights(ambulance_id):
     # 신호를 전송했고, 이미 지나간 것이 확실한 신호등은 기본 tls 프로그램으로 리셋 
     for tls_id in traci.trafficlight.getIDList():
         if ( tls_id in manipulated_tls.keys() ) and ( tls_id not in traffic_lights ) and ( tls_id in traffic_lights_in_route):
-            reset_traffic_light(tls_id)
-            del manipulated_tls[tls_id]
+            if get_current_time()-manipulated_tls[tls_id] > 5:
+                reset_traffic_light(tls_id)
+                del manipulated_tls[tls_id]
