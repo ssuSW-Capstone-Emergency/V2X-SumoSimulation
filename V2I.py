@@ -2,9 +2,10 @@ import traci
 from utils import *
 from packet import *
 
-notify_v2i_distance = 80  
+notify_v2i_distance = 200  
 ambulance_id = "emergency1"
 manipulated_tls = dict() # passed but not reset [tls_id]=time
+traffic_lights_in_route = None
 
 def get_in_out_lanes_for_tls(ambulance_id, tls_id):
     """
@@ -32,9 +33,14 @@ def get_in_out_lanes_for_tls(ambulance_id, tls_id):
 
 
 def handle_traffic_lights(ambulance_id):
+    global manipulated_tls, traffic_lights_in_route
+
     traffic_lights = get_upcoming_traffic_lights(ambulance_id)
     if not traffic_lights:
         return
+    
+    if traffic_lights_in_route is None:
+        traffic_lights_in_route = traffic_lights
 
     # 경로 상의 모든 다가오는 신호등에 대해 처리
     for tls_id in traffic_lights:
@@ -55,12 +61,12 @@ def handle_traffic_lights(ambulance_id):
                     manipulated_tls[tls_id]=get_current_time() # 신호 변경 시간 기록
 
 
-    # 지나간 신호등 업데이트
+    # 지나간 신호등 리셋
     # manipulated_tls에 존재한다: 이미 해당 tls에 제어 신호를 전송했다.
     # traffic_lights: 다가오는 신호등 목록
+    # traffic_lights_in_route: 경로 상의 모든 ㄹ잌신호등 목록
     # 신호를 전송했고, 이미 지나간 것이 확실한 신호등은 기본 tls 프로그램으로 리셋 
-    for tls_id in traffic_lights:
-        dist = get_distance_to_tls(ambulance_id, tls_id)
-        if ( tls_id in manipulated_tls.keys() ) and ( tls_id not in traffic_lights ):
+    for tls_id in traci.trafficlight.getIDList():
+        if ( tls_id in manipulated_tls.keys() ) and ( tls_id not in traffic_lights ) and ( tls_id in traffic_lights_in_route):
             reset_traffic_light(tls_id)
-            manipulated_tls.remove(tls_id)
+            del manipulated_tls[tls_id]
