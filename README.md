@@ -17,14 +17,14 @@ V2X (Vehicle-to-Everything) is a concept that encompasses V2V (Vehicle-to-Vehicl
   - `pip install -r requirements.txt`
 
 ## Usage
-- general(no V2X, V2I)
+- general(no V2V, V2I)
   1) edit general.py
      Uncomment the scenario you want to simulate.
      ```
      11 | # sumoCmd = ["sumo-gui", "-c", "asanH/map/asanH.sumocfg"]
      12 | # sumoCmd = ["sumo-gui", "-c", "cauH/map/cauH.sumocfg"]
      ```
-  3) run general.py
+  2) run general.py
      ```
      python general.py
      ```
@@ -36,7 +36,8 @@ V2X (Vehicle-to-Everything) is a concept that encompasses V2V (Vehicle-to-Vehicl
      14 | # sumoCmd = ["sumo-gui", "-c", "asanH/map/asanH.sumocfg"]
      15 | # sumoCmd = ["sumo-gui", "-c", "cauH/map/cauH.sumocfg"]
      ```
-  3) run V2X.py
+  2) run V2X.py
+
      When you run V2X.py, two ways are possible. All are technologies using V2X, and there are differences in specific algorithms and standards for adoption.
      ```
      python V2X.py
